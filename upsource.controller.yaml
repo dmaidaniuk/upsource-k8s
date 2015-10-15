@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: upsource-controller
+  labels:
+    state: serving
+  namespace: upsource
+spec:
+  replicas: 1
+  selector:
+    name: upsource
+  template:
+    metadata:
+      labels:
+        name: upsource
+      name: upsource
+    spec:
+      volumes:
+      - name: upsource-disk
+        # This GCE PD must already exist.
+        gcePersistentDisk:
+          pdName: upsource-disk
+          fsType: ext4
+      containers:
+      - imagePullPolicy: Always
+        image: eu.gcr.io/<YOUR-PROJECT-ID>/upsource:live
+        name: upsource
+        ports:
+        - name: http
+          containerPort: 8080
+        volumeMounts:
+        - mountPath: /opt/upsource-disk
+          name: upsource-disk

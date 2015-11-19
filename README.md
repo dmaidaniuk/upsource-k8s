@@ -12,15 +12,15 @@ Upsource is Jetbrain's Git repository browser and code review tool. This project
 The project can be deployed and run using Kubernetes eg. on GCE.
 
 1. First create a container cluster on GCE:
-`gcloud beta container --project "<YOUR-PROJECT-ID>" clusters create "upsource-cluster" --zone "us-central1-a" --machine-type "n1-standard-1" --num-nodes "1"`
+`gcloud container --project "<YOUR-PROJECT-ID>" clusters create "upsource-cluster" --zone "europe-west1-c" --machine-type "n1-standard-1" --num-nodes "1"`
 
 2. Create a persistent disk:
-`gcloud compute --project "<YOUR-PROJECT-ID>" disks create "upsource-disk" --size "100" --zone "us-central1-a" --description "Disk to persist upsource configuration and data." --type "pd-standard"`
+`gcloud compute --project "<YOUR-PROJECT-ID>" disks create "upsource-disk" --size "100" --zone "europe-west1-c" --description "Disk to persist upsource configuration and data." --type "pd-standard"`
 
   The startup script symlinks an existing conf directory from the disk. If the conf directory does not exist, it copies it over. If the disk is missing, it uses the ephemeral container's storage.
 
 3. Fetch and update the cluster credentials:
-`gcloud beta container clusters get-credentials --zone us-central1-a upsource-cluster`
+`gcloud container clusters get-credentials --project "<YOUR-PROJECT-ID>" --zone europe-west1-c upsource-cluster`
 
 4. Upload the upsource docker image to the kubernetes cluster:
 `gcloud docker push eu.gcr.io/<YOUR-PROJECT-ID>/upsource:<version>`
